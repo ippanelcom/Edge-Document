@@ -27,8 +27,12 @@ This documentation covers everything you need to know about using our API – fr
     - [PostalCode](#send-postalcode)
     - [Pattern](#send-pattern)
     - [VOTP](#send-votp)
-- [📦 Package](#-package)
 - [📊 Report](#-report)
+    - [Report](#outbox-report)
+        - [Get Outbox Report](#get-outbox-report)
+        - [Get Outbox Report By ID](#get-outbox-report-by-id)
+        - [Get Bulk Stats](#get-bulk-stats)
+        - [Get Bulk Recipients](#get-bulk-recipients)
 - [💳 Payment](#-payment)
 - [📞 Numbers](#-numbers)
 - [📁 Phonebook](#-phonebook)
@@ -1253,3 +1257,444 @@ curl --location '{base_url}/api/send' \
     }
 }'
 ```
+
+# 📊 Report
+This API allows you to get various reports related to your activities.
+
+## Outbox Report
+This API allows you to get reports of sent messages.
+### Get Outbox Report
+With this API, you can retrieve a general report of your SMS sending requests.
+It provides information about sent bulk messages but does not include individual message details.
+To access message-level data, please refer to the detailed APIs described later in this documentation.You can use the `page` and `limit` parameters to paginate through the results.
+### 📍 Endpoint
+POST {base_url}/api/report/new_list
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "page": 1,
+    "limit": 10,
+    "filters": {
+        "username": "*",
+        "number": "+98217000070",
+        "messages_outbox_id": "1100972179",
+        "create_from_date": "1744102007",
+        "create_to_date": "1744102007",
+        "send_from_date": "1744102007",
+        "send_to_date": "1744102007",
+        "from_exit_count": 1,
+        "to_exit_count": 100,
+        "message": "تست",
+        "state_id":"6"
+    }
+}
+```
+All fields in the `filters` object are optional. You can use any combination of them to filter your results.
+Some filter fields only accept specific predefined values.
+Below, you’ll find the list of allowed values for each field, along with a brief explanation of what each value means.
+- `state_id`:
+  - `0`: The message is in the process of create.
+  - `1`: The message create successfully and is in the monitoring queue.
+  - `2`: The message is in the process of sending.
+  - `3`: The message rejected by the monitoring system.
+  - `4`: The recipients of this message were either entered incorrectly or are not valid.
+  - `5`: The message is in send queue.
+  - `6`: The message was sent successfully.
+  - `7`: The message sending has been canceled.
+  - `8`: Insufficient credit for sending.
+  - `9`: The message was not sent due to a system error.
+
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "username": "*****",
+            "number_color": "#95E871",
+            "number": "+981000",
+            "number_id": "123654",
+            "messages_outbox_id": "12545856",
+            "state": "finish",
+            "type": "pattern_transactional",
+            "time_send": "1745409418",
+            "time": "1745409418",
+            "rcpts_count": "1",
+            "exit_count": "1",
+            "status": "پایان یافته",
+            "partner_id": null,
+            "in_delivery_line": 0,
+            "valid": "approve",
+            "message": "متن پیام",
+            "part": null,
+            "cost": 3990.2,
+            "summary": null,
+            "user_ip": null,
+            "user_id": null,
+            "files_path": null,
+            "parent_id": null,
+            "state_id": 6
+        },
+        {
+            "username": "******",
+            "number_color": "#95E871",
+            "number": "+981000",
+            "number_id": "1236587",
+            "messages_outbox_id": "588459562",
+            "state": "finish",
+            "type": "pattern",
+            "time_send": "1745409418",
+            "time": "1745409418",
+            "rcpts_count": "1",
+            "exit_count": "1",
+            "status": "پایان یافته",
+            "partner_id": null,
+            "in_delivery_line": 0,
+            "valid": "approve",
+            "message": "متن پیام",
+            "part": null,
+            "cost": 6144.9,
+            "summary": null,
+            "user_ip": null,
+            "user_id": null,
+            "files_path": null,
+            "parent_id": null,
+            "state_id": 6
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 32282040,
+        "path": "/api/report/new_list",
+        "per_page": 2,
+        "to": 2,
+        "total": 64564080,
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "invalid state",
+        "message_parameters": [],
+        "message_code": "400-31",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/report/new_list' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data '{
+    "page": 1,
+    "limit": 10,
+    "filters": {
+        "username": "*",
+        "number": "+98217000070",
+        "messages_outbox_id": "1100972179",
+        "create_from_date": "1744102007",
+        "create_to_date": "1744102007",
+        "send_from_date": "1744102007",
+        "send_to_date": "1744102007",
+        "from_exit_count": 1,
+        "to_exit_count": 100,
+        "message": "تست",
+        "state_id":"6"
+    }
+}'
+```
+## Get Outbox Report By ID
+This API allows you to get a detailed report of a specific sent message using its ID.
+### 📍 Endpoint
+POST {base_url}/api/report/by_bulk/{messages_outbox_id}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "page": 1,
+    "limit": 10
+}
+```
+### ✅ Success Response
+```json
+{
+    "data": {
+        "username": "*****",
+        "number_color": null,
+        "number": "+98votp",
+        "number_id": "154845",
+        "messages_outbox_id": "5544778899",
+        "state": "finish",
+        "type": "sendvoice",
+        "time_send": "1744121368",
+        "time": "1744121368",
+        "rcpts_count": "1",
+        "exit_count": "1",
+        "status": "پایان یافته",
+        "return": 0,
+        "partner_id": null,
+        "in_delivery_line": 0,
+        "valid": null,
+        "message": "1234",
+        "part": "1",
+        "cost": 1064,
+        "summary": "ارسال کد فعالسازی صوتی : 1234",
+        "user_ip": "1.1.0.1",
+        "user_id": "99885544",
+        "reject_comment": null,
+        "files_path": "1/send/SZiasdasdasdgghgf.wav",
+        "parent_id": "98554",
+        "state_id": 6
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/report/by_bulk/{messages_outbox_id}' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+# Get Bulk Stats
+This API allows you to get statistics about your sent messages.
+### 📍 Endpoint
+GET {base_url}/api/report/bulk_stats?bulk_id={messages_outbox_id}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### ✅ Success Response
+```json
+{
+    "data": {
+        "operators_blacklist": {
+            "irancell": {
+                "en": 0,
+                "fa": 0
+            },
+            "mci": {
+                "en": 0,
+                "fa": 0
+            }
+        },
+        "operators_failed": {
+            "irancell": {
+                "en": 0,
+                "fa": 0
+            },
+            "mci": {
+                "en": 0,
+                "fa": 0
+            }
+        },
+        "operators_pending": {
+            "irancell": {
+                "en": 0,
+                "fa": 0
+            },
+            "mci": {
+                "en": 0,
+                "fa": 0
+            }
+        },
+        "operators_sent": {
+            "irancell": {
+                "en": 0,
+                "fa": 0
+            },
+            "mci": {
+                "en": 0,
+                "fa": 0
+            }
+        },
+        "operators_delivered": {
+            "irancell": {
+                "en": 0,
+                "fa": "1"
+            },
+            "mci": {
+                "en": 0,
+                "fa": 0
+            }
+        }
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه bulk_id الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "bulk_id": [
+                "تکمیل گزینه bulk_id الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/report/bulk_stats?bulk_id={messages_outbox_id}' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+# Get Bulk Recipients
+This API allows you to get the recipients of a specific sent message using its ID.
+If the message status is finalized, the delivery status for each recipient will also be returned.
+### 📍 Endpoint
+GET {base_url}/api/report/recipients?page=1&per_page=10&bulk_id={messages_outbox_id}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "recipient": "+989190000000",
+            "message": "متن پیام",
+            "is_readable": true,
+            "msg_parts": "1",
+            "message_status": "1"
+        },
+        {
+            "recipient": "+989120000000",
+            "message": "با سلام",
+            "is_readable": true,
+            "msg_parts": "1",
+            "message_status": "1"
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "/api/report/recipients",
+        "per_page": 10,
+        "to": 2,
+        "total": 2,
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+`message_status` field can have the following values:
+- `0`: Sent to the operator
+- `1`: Operator received the message
+- `2`: Message delivered to the recipient
+- `3`: Message not delivered to the recipient
+- `4`: Blacklisted number
+
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه bulk_id الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "bulk_id": [
+                "تکمیل گزینه bulk_id الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/report/recipients?page=1&per_page=10&bulk_id={messages_outbox_id}' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+
