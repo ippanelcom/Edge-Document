@@ -1,4 +1,6 @@
 # 📌 API Documentation
+👋 Hey there! If you've got an account with IPPanel, you're in the right place.
+This documentation covers everything you need to know about using our API – from sending messages to managing your account and beyond.
 ## 📚 Table of Contents
 
 > Base URL: `{base_url}`  
