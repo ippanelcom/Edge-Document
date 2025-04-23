@@ -3,7 +3,7 @@
 This documentation covers everything you need to know about using our API – from sending messages to managing your account and beyond.
 ## 📚 Table of Contents
 
-> Base URL: `http://edge.ippanel.com/v1`
+> Base URL: `https://edge.ippanel.com/v1`
 
 >Please replace `{base_url}` with the actual base URL of the server.
 
