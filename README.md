@@ -17,6 +17,14 @@
         - [Change Password By Token](#change-password-by-token)
     - [Logout](#logout)
     - [Check Token](#check-token)
+- [📨 Send](#-send-sms)
+    - [Normal](#send-sms-normal)
+    - [Webservice](#send-webservice)
+    - [Peer To Peer](#send-peer-to-peer)
+    - [Peer To Peer By File](#send-peer-to-peer-by-file)
+    - [PostalCode](#send-postalcode)
+    - [Pattern](#send-pattern)
+    - [VOTP](#send-votp)
 - [📦 Package](#-package)
 - [📊 Report](#-report)
 - [💳 Payment](#-payment)
@@ -544,3 +552,702 @@ curl --location '{base_url}/api/acl/auth/check_token' \
 --header 'Authorization: your-token'
 ```
 
+# 📨 Send Sms
+You can send SMS using the following endpoints. The main endpoint is `/api/send`, for changing the sending method, you can use the sending type parameter in the request body.
+
+## Send Sms Normal
+This endpoint is used to quickly send SMS messages.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "normal",
+    "from_number": "+983000505",
+    "message": "متن پیام",
+    "params": {
+        "recipients": [
+            "+989120000000",
+            "+989350000000"
+        ]
+    },
+    "send_time": "2025-03-12 21:20:02"
+}
+```
+in the above request and all another sending types, the `send_time` field is optional and if not provided, the system will use the current time.if you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`.timezone is UTC.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123544244
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "normal",
+    "from_number": "+983000505",
+    "message": "متن پیام",
+    "params": {
+        "recipients": [
+            "+989120000000",
+            "+989350000000"
+        ]
+    },
+    "send_time": "2025-03-12 21:20:02"
+}'
+```
+## Send Webservice
+This endpoint is used to send SMS messages using a web service.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "webservice",
+    "from_number": "+983000505",
+    "message": "متن پیام",
+    "params": {
+        "recipients": [
+            "+989120000000",
+            "+989350000000"
+        ]
+    },
+    "send_time": "2025-03-12 21:20:02"
+}
+```
+in the above request and all another sending types, the `send_time` field is optional and if not provided, the system will use the current time.if you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`.timezone is UTC.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123544244
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "webservice",
+    "from_number": "+983000505",
+    "message": "متن پیام",
+    "params": {
+        "recipients": [
+            "+989120000000",
+            "+989350000000"
+        ]
+    },
+    "send_time": "2025-03-12 21:20:02"
+}'
+```
+## Send Peer To Peer
+This API allows you to send multiple messages to multiple recipients in a peer-to-peer format. Each message can have its own set of recipients.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "peer_to_peer",
+    "from_number": "+983000505",
+    "params": [
+        {
+            "recipients": [
+                "+989120000000",
+                "+989350000000"
+            ],
+            "message": "پیام اول"
+        },
+        {
+            "recipients": [
+                "+989130000000"
+            ],
+            "message": "پیام دوم"
+        }
+    ]
+}
+```
+Each item in the params array represents a message and its recipients.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208,
+            1123594210
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+The response returns an array of message_outbox_ids – one ID per message sent (regardless of how many recipients it had).
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "peer_to_peer",
+    "from_number": "+983000505",
+    "params": [
+        {
+            "recipients": [
+                "+989120000000",
+                "+989350000000"
+            ],
+            "message": "پیام اول"
+        },
+        {
+            "recipients": [
+                "+989130000000"
+            ],
+            "message": "پیام دوم"
+        }
+    ]
+}'
+```
+## Send Peer To Peer By File
+This API allows you to send multiple messages to multiple recipients in a peer-to-peer format using a file. Each message can have its own set of recipients.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | multipart/form-data |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "peer_to_peer_file",
+    "from_number": "+983000505",
+    "send_time": "2025-03-12 21:20:02",
+    "files[]": "file.csv"
+}
+```
+in the above request and all another sending types, the `send_time` field is optional and if not provided, the system will use the current time.if you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`.timezone is UTC.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208,
+            1123594210
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+The response returns an array of message_outbox_ids – one ID per message sent (regardless of how many recipients it had).
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه فایل ها الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "files": [
+                "تکمیل گزینه فایل ها الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Accept: application/json' \
+--form 'sending_type="peer_to_peer_file"' \
+--form 'from_number="+983000505"' \
+--form 'send_time="2025-04-25 10:10:10"' \
+--form 'files[]=@"/path/to/your/file.csv"' \
+```
+# Send PostalCode
+This API allows you to send messages using postal codes.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "postal_code",
+    "from_number": "+98BANK",
+    "message": "متن پیام",
+    "params": [
+        {
+            "bank": "all",
+            "postal_code": 131,
+            "gender": 0,
+            "age_from": 1330,
+            "age_to": 1402,
+            "mci": {
+                "start": 0,
+                "size": 1
+            },
+            "irancell": {
+                "start": 0,
+                "size": 0
+            },
+            "other": {
+                "start": 0,
+                "size": 0
+            }
+        },
+        {
+            "bank": "all",
+            "postal_code": 141,
+            "gender": 0,
+            "age_from": 1330,
+            "age_to": 1402,
+            "mci": {
+                "start": 0,
+                "size": 1
+            },
+            "irancell": {
+                "start": 0,
+                "size": 0
+            },
+            "other": {
+                "start": 0,
+                "size": 0
+            }
+        }
+    ],
+    "other_recipients": [
+        "+989120000000",
+        "+989350000000"
+    ],
+    "send_time": "2025-02-28 10:52:02"
+}
+```
+in the above request and all another sending types, the `send_time` field is optional and if not provided, the system will use the current time.if you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`.timezone is UTC.
+in the above request, the `params` field is an array of objects, each representing a postal code and its associated parameters. The `other_recipients` field is optional and an array of phone numbers that will receive the message in addition to the postal code recipients.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "postal_code",
+    "from_number": "+98BANK",
+    "message": "متن پیام",
+    "params": [
+        {
+            "bank": "all",
+            "postal_code": 131,
+            "gender": 0,
+            "age_from": 1330,
+            "age_to": 1402,
+            "mci": {
+                "start": 0,
+                "size": 1
+            },
+            "irancell": {
+                "start": 0,
+                "size": 0
+            },
+            "other": {
+                "start": 0,
+                "size": 0
+            }
+        },
+        {
+            "bank": "all",
+            "postal_code": 141,
+            "gender": 0,
+            "age_from": 1330,
+            "age_to": 1402,
+            "mci": {
+                "start": 0,
+                "size": 1
+            },
+            "irancell": {
+                "start": 0,
+                "size": 0
+            },
+            "other": {
+                "start": 0,
+                "size": 0
+            }
+        }
+    ],
+    "other_recipients": [
+        "+989120000000",
+        "+989350000000"
+    ],
+    "send_time": "2025-02-28 10:52:02"
+}'
+```
+## Send Pattern
+This API allows you to send messages using a pattern.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "pattern",
+    "from_number": "+983000505",
+    "code": "xxxxxxxxxxxxxxx",
+    "recipients": [
+        "+989120000000"
+    ],
+    "params": {
+        "code": "متن جایگذاری"
+    }
+}
+```
+in the above request, the `params` field is an object representing the pattern and its associated parameters.
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه code الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "code": [
+                "تکمیل گزینه code الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "pattern",
+    "from_number": "+983000505",
+    "code": "xxxxxxxxxxxxxxx",
+    "recipients": [
+        "+989120000000"
+    ],
+    "params": {
+        "code": "متن جایگذاری"
+    }
+}'
+```
+## Send VOTP
+This API allows you to send a VOTP (Voice One-Time Password) message.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "sending_type": "votp",
+    "message": "45852",
+    "params": {
+        "recipients": [
+            "+989120000000"
+        ]
+    }
+}
+```
+### ✅ Success Response
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "votp",
+    "message": "45852",
+    "params": {
+        "recipients": [
+            "+989120000000"
+        ]
+    }
+}'
+```
