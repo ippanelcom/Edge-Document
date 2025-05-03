@@ -3,7 +3,7 @@
 This documentation covers everything you need to know about using our API – from sending messages to managing your account and beyond.
 ## 📚 Table of Contents
 
-> Base URL: `https://edge.ippanel.com/v1`
+> Base URL: `http://edge.ippanel.com/v1`
 
 >Please replace `{base_url}` with the actual base URL of the server.
 
@@ -34,8 +34,10 @@ This documentation covers everything you need to know about using our API – fr
         - [Get Outbox Report By ID](#get-outbox-report-by-id)
         - [Get Bulk Stats](#get-bulk-stats)
         - [Get Bulk Recipients](#get-bulk-recipients)
-- [💳 Payment](#-payment)
 - [📞 Numbers](#-numbers)
+    - [Assign Number](#assign-number)
+    - [Unassign Number](#unassign-number)
+- [💳 Payment](#-payment)
 - [📁 Phonebook](#-phonebook)
 - [🏦 Bank](#-bank)
 - [📝 Draft](#-draft)
@@ -1697,5 +1699,221 @@ curl --location '{base_url}/api/report/recipients?page=1&per_page=10&bulk_id={me
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
+# 📞 Numbers
+With these endpoints, you can view and manage the lines that belong to you. If you are a reseller, you can also use these endpoints to manage the lines of your users, such as assigning a line to a user or reclaiming a line from a user.
+## Assign Number
+This API allows you to assign a number to a user.
+### 📍 Endpoint
+POST {base_url}/api/numbers/assign
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "number_id": 10,
+    "target_user_id": 123,
+    "number": "+983000505",
+    "target_user": "testuser",
+    "send": true,
+    "gets": false
+}
+```
+API Request Parameters
 
+`number_id`      `integer`  Conditional, ID of the phone number to assign to the user. Required if `number` is not provided.
+
+`target_user_id` `integer`  Conditional, ID of the target user. Required if `target_user` is not provided.
+
+`number`         `string`   Conditional,  The phone number to assign. Required if `number_id` is not provided.
+
+`target_user`   `string`   Conditional,  Username of the target user. Required if `target_user_id` is not provided. 
+
+`send`           `boolean`  Required,     If `true`, the user will be allowed to send messages using this number.
+
+`gets`            `boolean`  Required,    If `true`, the user will be able to receive/view incoming messages for this number. Typically `true` for dedicated numbers.
+
+✅ Note: You must provide at least one of each of the following pairs:
+
+`number_id` or `number`
+
+`target_user_id` or `target_user`
+### ✅ Success Response
+```json
+{
+    "data": null,
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (400)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "number already assigned to user",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه number id الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "number_id": [
+                "تکمیل گزینه number id الزامی است"
+            ],
+            "number": [
+                "تکمیل گزینه number الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/numbers/assign' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data '{
+    "number_id": 10,
+    "target_user_id": 123,
+    "number": "+983000505",
+    "target_user": "testuser",
+    "send": true,
+    "gets": false
+}'
+```
+## Unassign Number
+This API allows you to unassign a number from a user.
+### 📍 Endpoint
+POST {base_url}/api/numbers/unassign
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+```json
+{
+    "number_id": 10,
+    "target_user_id": 123,
+    "number": "+983000505",
+    "target_user": "testuser"
+}
+```
+API Request Parameters
+
+`number_id`      `integer`  Conditional, ID of the phone number to unassign from the user. Required if `number` is not provided.
+
+`target_user_id` `integer`  Conditional, ID of the target user. Required if `target_user` is not provided.
+
+`number`         `string`   Conditional,  The phone number to unassign. Required if `number_id` is not provided.
+
+`target_user`   `string`   Conditional,  Username of the target user. Required if `target_user_id` is not provided.
+
+✅ Note: You must provide at least one of each of the following pairs:
+
+`number_id` or `number`
+
+`target_user_id` or `target_user`
+
+### ✅ Success Response
+```json
+{
+    "data": null,
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (400)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "number not assigned to user",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه number id الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "number_id": [
+                "تکمیل گزینه number id الزامی است"
+            ],
+            "number": [
+                "تکمیل گزینه number الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/numbers/unassign' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data '{
+    "number_id": 10,
+    "target_user_id": 123,
+    "number": "+983000505",
+    "target_user": "testuser"
+}'
+```
 
