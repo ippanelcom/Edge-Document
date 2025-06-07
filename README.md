@@ -30,6 +30,7 @@ account and beyond.
     - [Peer To Peer By File](#send-peer-to-peer-by-file)
     - [PostalCode](#send-postalcode)
     - [Pattern](#send-pattern)
+    - [Send File](#send-file)
     - [VOTP](#send-votp)
     - [Cancel Scheduled Message](#cancel-scheduled-message)
 - [📊 Report](#-report)
@@ -42,15 +43,25 @@ account and beyond.
 - [📞 Numbers](#-numbers)
     - [Assign Number](#assign-number)
     - [Unassign Number](#unassign-number)
+    - [List Numbers](#list-numbers)
 - [👤 User](#-user)
     - [Get Parents Tree](#get-parents-tree)
     - [List Users](#list-users)
 - [📦 Package](#-package)
     - [List Packages](#list-packages)
+- [Tickets](#tickets)
+    - [Create Ticket](#create-ticket)
+    - [List Tickets](#list-tickets)
+    - [Get Ticket By ID](#get-ticket-by-id)
+    - [Reply To Ticket](#reply-to-ticket)
+- [📝 Draft](#draft)
+    - [Create Draft Group](#create-draft-group)
+    - [List Draft Groups](#list-draft-groups)
+    - [Create Draft](#create-draft)
+    - [List Drafts](#list-drafts)
 - [💳 Payment](#-payment)
 - [📁 Phonebook](#-phonebook)
 - [🏦 Bank](#-bank)
-- [📝 Draft](#-draft)
 
 > Base URL: `{base_url}`  
 (لطفاً `{base_url}` را با آدرس اصلی سرور جایگزین کنید.)
@@ -1371,6 +1382,95 @@ curl --location '{base_url}/api/send' \
 }'
 ```
 
+## Send File
+This API allows you to send messages using a file containing phone numbers.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value               |
+|---------------|---------------------|
+| Content-Type  | multipart/form-data |
+| Authorization | your-token          |
+### 📤 Request Body
+
+```json
+{
+    "sending_type": "file",
+    "from_number": "+983000505",
+    "message": "متن پیام",
+    "files[]": "file.csv",
+    "send_time": "2025-03-12 21:20:02",
+    "other_recipients": [
+        "+989120000000",
+        "+989350000000"
+    ]
+}
+```
+in the above request, the `files[]` field is an array of files containing phone numbers. The `send_time` field is optional and if not provided, the system will use the current time. If you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`. Timezone is UTC. The `other_recipients` field is optional and an array of phone numbers that will receive the message in addition to the file recipients.
+### ✅ Success Response
+
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه فایل ها الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "files": [
+                "تکمیل گزینه فایل ها الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Accept: application/json' \
+--form 'sending_type="file"' \
+--form 'from_number="+983000505"' \
+--form 'message="متن پیام"' \
+--form 'files[]=@"/path/to/your/file.csv"' \
+--form 'send_time="2025-03-12 21:20:02"' \
+--form 'other_recipients[]="+989120000000"' \
+--form 'other_recipients[]="+989350000000"'
+```
+
 ## Send VOTP
 
 This API allows you to send a VOTP (Voice One-Time Password) message.
@@ -2414,6 +2514,91 @@ curl --location '{base_url}/api/numbers/unassign' \
     "target_user": "testuser"
 }'
 ```
+## List Numbers
+This API allows you to list all numbers that belong to users.
+### 📍 Endpoint
+GET {base_url}/api/numbers?page=1&per_page=10
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+
+### ✅ Success Response
+
+```json
+{
+    "data": [
+        {
+            "id": 10001,
+            "number": "+981234567890",
+            "operator_id": 1,
+            "alias": null,
+            "gets": 0,
+            "is_66_char": 0
+        },
+        {
+            "id": 10002,
+            "number": "+981234567891",
+            "operator_id": 2,
+            "alias": "Sample Alias",
+            "gets": 0,
+            "is_66_char": 0
+        },
+        {
+            "id": 10003,
+            "number": "+981234567892",
+            "operator_id": 3,
+            "alias": null,
+            "gets": 0,
+            "is_66_char": 0
+        },
+        {
+            "id": 10004,
+            "number": "+981234567893",
+            "operator_id": 4,
+            "alias": null,
+            "gets": 0,
+            "is_66_char": 0
+        },
+        {
+            "id": 10005,
+            "number": "+981234567894",
+            "operator_id": 5,
+            "alias": null,
+            "gets": 0,
+            "is_66_char": 0
+        }
+    ],
+    "meta": {
+        "status": true,
+        "message": "Success",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/numbers?page=1&per_page=10' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
 
 # 👤 User
 
@@ -2787,4 +2972,760 @@ curl --location '{base_url}/api/acl/package/list?page=1&per_page=10' \
 --header 'Authorization: Your Apikey/Token' 
 ```
 
+# Tickets
+This module is available only to **resellers**. Normal users do not need or have access to this module.
 
+## Create Ticket
+This API allows you to create a new ticket.
+### 📍 Endpoint
+POST {base_url}/api/ticket
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  |  multipart/form-data |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "subject": "عنوان تیکت",
+    "category_id": "123",
+    "description": "متن تیکت",
+    "sms_notification": "1",
+    "file": "file1.zip"
+}
+```
+### Request Parameters
+| Key         | Type     | Description                                                                                                                                                            |
+|-------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `subject`   | `string` | Required, The subject of the ticket.                                                                                                                                   |
+| `category_id` | `string` | Required, The ID of the category to which the ticket belongs.                                                                                                          |
+| `description` | `string` | Required, The content of the ticket.                                                                                                                                   |
+| `sms_notification` | `string` | Optional, If set to `1`, the user will receive an SMS notification when the ticket is updated. Default is `0`.                                                         |
+| `file`      | `file`   | Optional, You can attach file to the ticket. The file should be in `multipart/form-data` format and can be a zip file or jpg/png type. The maximum file size is 10 MB. |
+### ✅ Success Response
+```json
+{
+    "data": {
+        "ticket_id": 123456
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه subject الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "subject": [
+                "تکمیل گزینه subject الزامی است"
+            ],
+            "category_id": [
+                "تکمیل گزینه category_id الزامی است"
+            ],
+            "description": [
+                "تکمیل گزینه description الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/ticket' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Authorization: Your Apikey/Token' \
+--form 'subject="عنوان تیکت"' \
+--form 'category_id="123"' \
+--form 'description="متن تیکت"' \
+--form 'sms_notification="1"' \
+--form 'file=@"/path/to/your/file.zip"'
+```
+## List Tickets
+This API allows you to list all tickets under your reseller account.
+You can use the `page` and `per_page` parameters to paginate through the results.
+### 📍 Endpoint
+GET {base_url}/api/ticket?page=1&per_page=10
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### Filters Parameters
+| Key          | Type     | Description                                                                                                                                                                                                                  |
+|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `username`   | `string` | *(Optional)* Username of the user who created the ticket.                                                                                                                                                                     |
+| `ticket_id` | `string` | *(Optional)* ID of the ticket.                                                                                                                                                                                               |
+| `category_id` | `string` | *(Optional)* ID of the category to which the ticket belongs.                                                                                                                                                                  |
+| `sub_category_id` | `string` | *(Optional)* ID of the sub-category to which the ticket belongs.                                                                                                                                                              |
+| `state_id` | `string` | *(Optional)* ID of the state of the ticket.                                                                                                                                                                                   |
+
+`state_id` can have the following values:
+- `1`: Waiting for response
+- `2`: Waiting for support
+- `3`: Answered
+- `4`: Closed
+- `5`: Forwarded to another department
+
+⚠️ Important: To exclude a filter from the query, do not include it at all in the request. Avoid sending it with an empty string or `null` value.
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "id": 100001,
+            "ticket_id": 100001,
+            "user_id": 200001,
+            "parent_id": 300001,
+            "category_id": 10,
+            "sub_category_id": 20,
+            "importance": "acute",
+            "state_id": 3,
+            "subject": "Sample ticket with file",
+            "desc": "Sample description for file upload",
+            "manager_comment": null,
+            "close_desc": null,
+            "admin_seen": 1,
+            "user_seen": 1,
+            "sms_notification": 0,
+            "interaction_count": 1,
+            "longest_interaction": 0,
+            "min_rate": null,
+            "deleted_at": null,
+            "created_at": "2025-01-01T10:00:00.000000Z",
+            "updated_at": "2025-01-01T11:00:00.000000Z",
+            "jira_id": 40001,
+            "rate": 0,
+            "rate_comment": null,
+            "user": {
+                "user_id": 200001,
+                "uname": "sampleuser"
+            },
+            "category": {
+                "id": 10,
+                "name": "Plugins, Domains, API"
+            },
+            "sub_category": {
+                "id": 20,
+                "title": "System Errors"
+            },
+            "state": {
+                "id": 3,
+                "name": "replied"
+            },
+            "forward": {
+                "id": 500001,
+                "from": 200001,
+                "ticket_id": 100001,
+                "to": 1,
+                "created_at": "2025-01-01T10:00:00.000000Z",
+                "updated_at": "2025-01-01T10:10:00.000000Z",
+                "deleted_at": null,
+                "seen": 1
+            }
+        },
+        {
+            "id": 100002,
+            "ticket_id": 100002,
+            "user_id": 200001,
+            "parent_id": 300001,
+            "category_id": 11,
+            "sub_category_id": 21,
+            "importance": "acute",
+            "state_id": 3,
+            "subject": "Sample ticket",
+            "desc": "Sample ticket description",
+            "manager_comment": null,
+            "close_desc": null,
+            "admin_seen": 1,
+            "user_seen": 0,
+            "sms_notification": 0,
+            "interaction_count": 1,
+            "longest_interaction": 1234,
+            "min_rate": null,
+            "deleted_at": null,
+            "created_at": "2025-01-02T08:00:00.000000Z",
+            "updated_at": "2025-01-02T09:00:00.000000Z",
+            "jira_id": 40002,
+            "rate": 0,
+            "rate_comment": null,
+            "user": {
+                "user_id": 200001,
+                "uname": "sampleuser"
+            },
+            "category": {
+                "id": 11,
+                "name": "System Questions"
+            },
+            "sub_category": {
+                "id": 21,
+                "title": "Other Issues"
+            },
+            "state": {
+                "id": 3,
+                "name": "replied"
+            },
+            "forward": {
+                "id": 500002,
+                "from": 200001,
+                "ticket_id": 100002,
+                "to": 1,
+                "created_at": "2025-01-02T08:00:00.000000Z",
+                "updated_at": "2025-01-02T08:00:00.000000Z",
+                "deleted_at": null,
+                "seen": 0
+            }
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 15,
+        "per_page": 2,
+        "to": 2,
+        "total": 30,
+        "status": true,
+        "message": "Success",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/ticket?page=1&per_page=10' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+### Get Ticket By ID
+This API allows you to get a specific ticket by its ID.
+### 📍 Endpoint
+GET {base_url}/api/ticket/show?ticket_id={ticket_id}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+
+### Request Parameters
+| Key          | Type     | Description                                                                                                                                                                                                                  |
+|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ticket_id`  | `string` | Required, The ID of the ticket you want to retrieve.                                                                                                                                                                         |
+
+### ✅ Success Response
+```json
+{
+    "data": {
+        "id": 100001,
+        "ticket_id": 100001,
+        "user_id": 200001,
+        "parent_id": 300001,
+        "importance": "acute",
+        "subject": "Sample ticket with file",
+        "category": "Plugins, Domains, API",
+        "category_id": 10,
+        "sub_category_id": 20,
+        "state": "replied",
+        "state_id": 3,
+        "sub_state_id": null,
+        "description": "Sample description for file upload",
+        "close_desc": null,
+        "user_seen": 1,
+        "sms_notification": 0,
+        "created_at": "2025-01-01 10:00:00",
+        "attachment": "https://storage.example.com/sampleuser/ticket/samplefile.zip",
+        "interactions": [
+            {
+                "id": 400001,
+                "description": "Sample reply",
+                "agent_id": 200001,
+                "agent_username": "sampleagent",
+                "created_at": "2025-01-01 10:10:00",
+                "attachment": "https://storage.example.com/sampleuser/ticket/sample-reply.zip",
+                "partner_title": "sampleagent",
+                "private": 0,
+                "username": "sampleagent"
+            }
+        ],
+        "forward": {
+            "id": 500001,
+            "from": 200001,
+            "ticket_id": 100001,
+            "to": 1,
+            "created_at": "2025-01-01T10:00:00.000000Z",
+            "updated_at": "2025-01-01T10:10:00.000000Z",
+            "deleted_at": null,
+            "seen": true
+        },
+        "manager_comment": "",
+        "jira_id": 40001,
+        "rate": 0
+    },
+    "meta": {
+        "status": true,
+        "message": "Success",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه ticket id الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "ticket_id": [
+                "تکمیل گزینه ticket id الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/ticket/show?ticket_id={ticket_id}' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+## Reply To Ticket
+This API allows you to reply to a specific ticket.
+### 📍 Endpoint
+POST {base_url}/api/ticket/interaction
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  |  multipart/form-data |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "ticket_id": 100001,
+    "description": "Sample reply",
+    "file": "file1.zip"
+}
+```
+### Request Parameters
+| Key          | Type     | Description                                                                                                                                                            |
+|--------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ticket_id`  | `string` | Required, The ID of the ticket you want to reply to.                                                                                                                    |
+| `description` | `string` | Required, The content of your reply.                                                                                                                                   |
+| `file`       | `file`   | Optional, You can attach a file to your reply. The file should be in `multipart/form-data` format and can be a zip file or jpg/png type. The maximum file size is 10 MB. |
+### ✅ Success Response
+```json
+{
+    "data": {
+        "interaction_id": 400001,
+        "ticket": {
+            "id": 100001,
+            "user_id": 200001,
+            "parent_id": 300001
+        }
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه ticket id الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "ticket_id": [
+                "تکمیل گزینه ticket id الزامی است"
+            ],
+            "description": [
+                "تکمیل گزینه description الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/ticket/interaction' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Authorization: Your Apikey/Token' \
+--form 'ticket_id="100001"' \
+--form 'description="Sample reply"' \
+--form 'file=@"/path/to/your/file.zip"'
+```
+
+# Draft
+With this module, you can manage your default (pre-written) messages. Fun fact: the previous developers named this section “draft” by mistake, but it’s actually for default messages! To avoid confusing our loyal API users, we decided not to change the name in this version. So go ahead—enjoy managing your default messages under the delightfully misleading name “draft”!
+
+## Create Draft Group
+This API allows you to create a new draft group.
+⚠️ Important: You can create a maximum of 20 draft groups. If you try to create more, you will receive an error.
+### 📍 Endpoint
+POST {base_url}/api/user/draft/group
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  | application/json |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "title":"عنوان گروه پیش‌نویس"
+}
+```
+### Request Parameters
+| Key          | Type     | Description                                                                   |
+|--------------|----------|-------------------------------------------------------------------------------|
+| `title`      | `string` | Required, The title of the draft group. The maximum length is 200 characters. |
+
+### ✅ Success Response
+```json
+{
+    "data": null,
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه title الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "title": [
+                "تکمیل گزینه title الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/user/draft/group' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data-raw '{
+    "title": "عنوان گروه پیش‌نویس"
+}'
+```
+## List Draft Groups
+This API allows you to list all draft groups under your account.
+### 📍 Endpoint
+GET {base_url}/api/user/draft/group/list
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "title": "Sample Draft",
+            "draft_group_id": 10001,
+            "user_id": 20001,
+            "time": 1700000000
+        },
+        {
+            "title": "Sample Draft",
+            "draft_group_id": 10002,
+            "user_id": 20001,
+            "time": 1700001000
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "per_page": 10,
+        "to": 2,
+        "total": 2,
+        "status": true,
+        "message": "Success",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/user/draft/group/list' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+## Create Draft
+This API allows you to create a new draft message under a specific draft group.
+⚠️ Important: You can create a maximum of 200 drafts. If you try to create more, you will receive an error.
+### 📍 Endpoint
+POST {base_url}/api/user/draft
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  | application/json |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "draft_group_id":123456,
+    "message":"تست پیام پیشفرض"
+}
+```
+### Request Parameters
+| Key          | Type     | Description                                                                        |
+|--------------|----------|------------------------------------------------------------------------------------|
+| `draft_group_id` | `integer` | Required, The ID of the draft group under which you want to create the draft.      |
+| `message`    | `string` | Required, The content of the draft message. The maximum length is 1400 characters. |
+### ✅ Success Response
+```json
+{
+    "data": null,
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه draft group id الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "draft_group_id": [
+                "تکمیل گزینه draft group id الزامی است"
+            ],
+            "message": [
+                "تکمیل گزینه message الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/user/draft' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data-raw '{
+    "draft_group_id": 123456,
+    "message": "تست پیام پیشفرض"
+}'
+```
+## List Drafts
+This API allows you to list all drafts under a specific draft group.
+### 📍 Endpoint
+GET {base_url}/api/user/draft/list?draft_group_id={draft_group_id}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### Request Parameters
+| Key          | Type     | Description                                                                                     |
+|--------------|----------|-------------------------------------------------------------------------------------------------|
+| `draft_group_id` | `integer` | **Optional** The ID of the draft group for which you want to list the drafts. If omitted, all drafts will be returned. |
+⚠️ Important: To exclude a filter from the query, do not include it at all in the request. Avoid sending it with an empty string or `null` value.
+
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "draft_group_id": 10001,
+            "user_id": 20001,
+            "draft_id": 30001,
+            "time": 1700000000,
+            "message": "Sample default message",
+            "type": "normal"
+        },
+        {
+            "draft_group_id": 10001,
+            "user_id": 20001,
+            "draft_id": 30002,
+            "time": 0,
+            "message": "Sample default message",
+            "type": "normal"
+        },
+        {
+            "draft_group_id": 10002,
+            "user_id": 20001,
+            "draft_id": 30003,
+            "time": 1700001000,
+            "message": "Another sample message",
+            "type": "normal"
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "per_page": 10,
+        "to": 3,
+        "total": 3,
+        "status": true,
+        "message": "Success",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه draft group id الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "draft_group_id": [
+                "تکمیل گزینه draft group id الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/user/draft/list?draft_group_id=10001' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
