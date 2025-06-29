@@ -2311,7 +2311,7 @@ This API allows you to get a detailed report of a specific sent message using it
 
 ### 📍 Endpoint
 
-POST {base_url}/api/report/by_bulk/{messages_outbox_id}
+GET {base_url}/api/report/by_bulk?messages_outbox_id={messages_outbox_id}
 
 ### 🧾 Headers
 
@@ -2387,7 +2387,7 @@ POST {base_url}/api/report/by_bulk/{messages_outbox_id}
 ### 🧪 Example using curl
 
 ```
-curl --location '{base_url}/api/report/by_bulk/{messages_outbox_id}' \
+curl --location --request GET '{base_url}/api/report/by_bulk?messages_outbox_id={messages_outbox_id}' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
@@ -4847,7 +4847,7 @@ DELETE {base_url}/api/patterns/normal/{pattern_code}
 ```
 ### 🧪 Example using curl
 ```
-curl --location --request DELET '{base_url}/api/patterns/normal/zcxxc465465zxc' \
+curl --location --request DELETE '{base_url}/api/patterns/normal/zcxxc465465zxc' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
