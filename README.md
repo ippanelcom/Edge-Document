@@ -29,6 +29,10 @@ account and beyond.
     - [Peer To Peer](#send-peer-to-peer)
     - [Peer To Peer By File](#send-peer-to-peer-by-file)
     - [PostalCode](#send-postalcode)
+    - [Country](#send-country)
+    - [Keyword](#send-keyword)
+    - [Keyword By Phonebook](#send-keyword-by-phonebook)
+    - [Phonebook](#send-phonebook)
     - [Pattern](#send-pattern)
     - [Send File](#send-file)
     - [VOTP](#send-votp)
@@ -60,6 +64,12 @@ account and beyond.
     - [Create Draft](#create-draft)
     - [List Drafts](#list-drafts)
 - [💳 Payment](#-payment)
+- [Pattern](#pattern)
+    - [Create Pattern](#create-pattern)
+    - [List Patterns](#list-patterns)
+    - [Get Pattern By Code](#get-pattern-by-code)
+    - [Update Pattern](#update-pattern)
+    - [Delete Pattern](#delete-pattern)
 - [📁 Phonebook](#-phonebook)
 - [🏦 Bank](#-bank)
 
@@ -1277,6 +1287,442 @@ curl --location '{base_url}/api/send' \
     "send_time": "2025-02-28 10:52:02"
 }'
 ```
+
+## Send Country
+This API allows you to send messages to all numbers in a specific province or county or city.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+
+```json
+{
+    "sending_type": "country",
+    "from_number": "+98BANK",
+    "message": "تست",
+    "params": [
+        {
+            "bank": "all",
+            "pre": 938,
+            "province_id": 89,
+            "county_id": 212,
+            "city_id": 82,
+            "gender": 0,
+            "age_from": 1300,
+            "age_to": 1401,
+            "mci": {
+                "start": 10,
+                "size": 100
+            },
+            "irancell": {
+                "start": 1,
+                "size": 2
+            },
+            "other": {
+                "start": 2,
+                "size": 3
+            }
+        }
+    ],
+    "other_recipients": [
+        "+989121111111",
+        "+989351111111"
+    ]
+}
+```
+in the above request, the `params` field is an array of objects, each representing a province or county or city and its
+associated parameters. The `other_recipients` field is optional and an array of phone numbers that will receive the
+message in addition to the province or county or city recipients.
+### ✅ Success Response
+
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "country",
+    "from_number": "+98BANK",
+    "message": "تست",
+    "params": [
+        {
+            "bank": "all",
+            "pre": 938,
+            "province_id": 89,
+            "county_id": 212,
+            "city_id": 82,
+            "gender": 0,
+            "age_from": 1300,
+            "age_to": 1401,
+            "mci": {
+                "start": 10,
+                "size": 100
+            },
+            "irancell": {
+                "start": 1,
+                "size": 2
+            },
+            "other": {
+                "start": 2,
+                "size": 3
+            }
+        }
+    ],
+    "other_recipients": [
+        "+989121111111",
+        "+989351111111"
+    ]
+}`
+```
+## Send Keyword
+This API allows you to send messages using a keyword.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | multipart/form-data |
+| Authorization | your-token          |
+### 📤 Request Body
+
+```json
+{
+    "sending_type": "keyword",
+    "from_number": "+983000505",
+    "message": "سلام {ex_B} م۱ {ex_C}",
+    "files[]": "file.xlsx",
+    "send_time": "2025-03-12 21:20:02"
+}
+```
+in the above request, the `files[]` field is an array of files containing phone numbers. The `send_time` field is optional and if not provided, the system will use the current time. If you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`. Timezone is UTC.
+### ✅ Success Response
+
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه فایل ها الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "files": [
+                "تکمیل گزینه فایل ها الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Accept: application/json' \
+--header 'Authorization: API TOKEN' \
+--form 'sending_type="keyword"' \
+--form 'from_number="+983000505"' \
+--form 'message="سلام {ex_B} م۱ {ex_C}"' \
+--form 'send_time="2025-04-25 10:10:10"' \
+--form 'files[]=@"/path/to/your/file.xlsx"'
+```
+
+## Keyword By Phonebook
+This API allows you to send messages using a keyword to a phonebook.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+
+```json
+{
+    "sending_type": "keyword_phonebook",
+    "from_number": "+983000505",
+    "message": "تاریخ {ex_50856}\nبدهی {ex_50858}",
+    "send_time": "2025-03-25 10:10:10",
+    "params": [
+        {
+            "phonebook_id": 123654
+        }
+    ]
+}
+```
+in the above request, the `params` field is an array of objects, each representing a phonebook and its associated parameters. The `send_time` field is optional and if not provided, the system will use the current time. If you want to send the message in the future, you can set the `send_time` field to the desired time in the format `YYYY-MM-DD HH:MM:SS`. Timezone is UTC.
+### ✅ Success Response
+
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "keyword_phonebook",
+    "from_number": "+983000505",
+    "message": "تاریخ {ex_50856}\nبدهی {ex_50858}",
+    "send_time": "2025-03-25 10:10:10",
+    "params": [
+        {
+            "phonebook_id": 123654
+        }
+    ]
+}'
+```
+
+## Send Phonebook
+This API allows you to send messages to one or more phonebooks.
+### 📍 Endpoint
+POST {base_url}/api/send
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### 📤 Request Body
+
+```json
+{
+    "sending_type": "phonebook",
+    "from_number": "+983000505",
+    "message": "تست",
+    "params": [
+        {
+            "phonebook_ids": [
+                "123654"
+            ],
+            "type": "all",
+            "start": "1",
+            "size": "2"
+        },
+        {
+            "phonebook_id": "456987",
+            "type": "detail",
+            "number_ids": [
+                "123",
+                "456",
+                "789"
+            ]
+        }
+    ]
+}
+```
+in the above request, the `params` field is an array of objects, each representing a phonebook and its associated parameters. The `type` field can be `all` or `detail`. If the type is `all`, the `phonebook_ids` field is an array of phonebook IDs. If the type is `detail`, the `phonebook_id` field is a single phonebook ID and the `number_ids` field is an array of phone numbers to send the message to.
+
+### ✅ Success Response
+
+```json
+{
+    "data": {
+        "message_outbox_ids": [
+            1123594208
+        ]
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_parameters": [],
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه پیام الزامی است",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "message": [
+                "تکمیل گزینه پیام الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+
+```
+curl --location '{base_url}/api/send' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: API TOKEN' \
+--data '{
+    "sending_type": "phonebook",
+    "from_number": "+983000505",
+    "message": "تست",
+    "params": [
+        {
+            "phonebook_ids": [
+                "123654"
+            ],
+            "type": "all",
+            "start": "1",
+            "size": "2"
+        },
+        {
+            "phonebook_id": "456987",
+            "type": "detail",
+            "number_ids": [
+                "123",
+                "456",
+                "789"
+            ]
+        }
+    ]
+}'
+```
+
 
 ## Send Pattern
 
@@ -3726,6 +4172,682 @@ GET {base_url}/api/user/draft/list?draft_group_id={draft_group_id}
 ### 🧪 Example using curl
 ```
 curl --location '{base_url}/api/user/draft/list?draft_group_id=10001' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+# Pattern
+With this module, you can manage your patterns. Patterns are predefined templates that can be used to quickly fill in fields in various forms or messages.
+
+## Create Pattern
+This API allows you to create a new pattern.
+### 📍 Endpoint
+POST {base_url}/api/user/pattern
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  | application/json |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "title": "test pattern",
+    "description": "پترن تستی",
+    "is_share": false,
+    "message": "پترن تستی %var% . کد شما %code%",
+    "website": "https://yoursite.com",
+    "variable": [
+        {
+            "name": "var",
+            "type": "string"
+        },
+        {
+            "name": "code",
+            "type": "integer"
+        }
+    ]
+}
+```
+### Request Parameters
+| Key          | Type     | Description                                                                                                                                       |
+|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `title`      | `string` | Optional, The title of the pattern. The maximum length is 200 characters.                                                                         |
+| `description` | `string` | Required, The description of the pattern. The maximum length is 500 characters.                                                                   |
+| `is_share`   | `boolean`| Required, If set to `true`, the pattern will be shared with suset users of reseller                                                               |
+| `message`    | `string` | Required, The content of the pattern message.                                                                                                     |
+| `website`    | `string` | Optional, The website URL associated with the pattern.  |
+| `variable`   | `array`  | Required, An array of variables used in the pattern message. Each variable should have a `name` and a `type`. The maximum number of variables is 30. |
+| `name`       | `string` | Required, The name of the variable. The maximum length is 50 characters.                                                                           |
+| `type`       | `string` | Required, The type of the variable. Can be one of `string`, `integer`.                                                                    |
+
+### ✅ Success Response
+```json
+{
+    "data": {
+        "id": "683c0ef4ad9979cd75066974",
+        "title": "test pattern",
+        "username": "username",
+        "pattern_code": "jhaskdab45s6f4sfw",
+        "pattern_message": "پترن تستی %var% . کد شما %code%",
+        "admin_comment": null,
+        "pattern_description": "پترن تستی",
+        "pattern_status": "pending",
+        "pattern_is_share": false,
+        "reject_text": "",
+        "type": "sms",
+        "variable": [
+            {
+                "name": "var",
+                "type": "string",
+                "len": 40
+            },
+            {
+                "name": "code",
+                "type": "integer",
+                "len": 40
+            }
+        ],
+        "delimiter": "%",
+        "updated_at": "2025-06-01T08:27:32.244000Z",
+        "time": 1748766452,
+        "pattern_state_revision": null,
+        "pattern_message_revision": null,
+        "pattern_is_share_revision": null,
+        "pattern_description_revision": null,
+        "pattern_delimiter_revision": null,
+        "pattern_state_log": null,
+        "pattern_message_log": null,
+        "pattern_is_share_log": null,
+        "pattern_description_log": null,
+        "pattern_delimiter_log": null
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه description الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "description": [
+                "تکمیل گزینه description الزامی است"
+            ],
+            "message": [
+                "تکمیل گزینه message الزامی است"
+            ],
+            "variable.0.name": [
+                "تکمیل گزینه variable.0.name الزامی است"
+            ],
+            "variable.0.type": [
+                "تکمیل گزینه variable.0.type الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/patterns/normal' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data-raw '{
+    "title": "test pattern",
+    "description": "پترن تستی",
+    "is_share": false,
+    "message": "پترن تستی %var% . کد شما %code%",
+    "variable": [
+        {
+            "name": "var",
+            "type": "string"
+        },
+        {
+            "name": "code",
+            "type": "integer"
+        }
+    ]
+}'
+```
+
+## List Patterns
+This API allows you to list all patterns under your account.
+### 📍 Endpoint
+GET {base_url}/api/patterns
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### Request Parameters
+| Key          | Type     | Description                                                                                                                                                                 |
+|--------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `filter[code]`       | `string` | Optional, The code of the pattern you want to filter by. If omitted, all patterns will be returned.                                                                         |
+| `filter[title]`      | `string` | Optional, The title of the pattern you want to filter by. If omitted, all patterns will be returned.                                                                        |
+| `filter[is_share]`   | `boolean`| Optional, If set to `true`, only shared patterns will be returned. If set to `false`, only non-shared patterns will be returned. If omitted, all patterns will be returned. |
+| `filter[state]`     | `string` | Optional, The state of the pattern you want to filter by. Can be one of `active`, `inactive`. If omitted, all patterns will be returned.                                    |
+| `filter[type]`      | `string` | Optional, The type of the pattern you want to filter by. Can be one of `normal`, `systemic`. If omitted, all patterns will be returned.                                        |
+⚠️ Important: To exclude a filter from the query, do not include it at all in the request. Avoid sending it with an empty string or `null` value.
+### ✅ Success Response
+```json
+{
+    "data": [
+        {
+            "id": "67b1b80sdf55sff8f3d069472",
+            "partner_id": null,
+            "verifier_user_id": null,
+            "verifier_partner_id": null,
+            "title": null,
+            "username": "user",
+            "user_id": "1234",
+            "pattern_code": "zcxxc465465zxc",
+            "pattern_message": "خوش امدید: کد تایید شما %code%",
+            "admin_comment": "لطفا نام مجموعه را در متن پترن درج نمایید تا گیرنده متوجه مرجع پیام باشد.\nلطفا آدرس سایت را در متن یا توضیحات پترن درج نمایید تا پترن قابل بررسی باشد.\n",
+            "pattern_description": "description",
+            "website": null,
+            "pattern_status": "inactive",
+            "pattern_status_fa": "رد شده",
+            "pattern_status_id": 2,
+            "pattern_is_share": false,
+            "reject_text": "",
+            "type": "sms",
+            "variable": [
+                {
+                    "name": "code",
+                    "type": "string",
+                    "len": 20
+                }
+            ],
+            "delimiter": "%",
+            "updated_at": "2025-02-16T10:04:03.237000Z",
+            "time": 1739700243,
+            "pattern_type": "normal",
+            "readonly": false,
+            "pattern_state_revision": null,
+            "pattern_message_revision": null,
+            "pattern_is_share_revision": null,
+            "pattern_description_revision": null,
+            "pattern_delimiter_revision": null,
+            "pattern_variable_revision": null,
+            "pattern_type_revision": "",
+            "pattern_state_log": null,
+            "pattern_message_log": null,
+            "pattern_is_share_log": null,
+            "pattern_description_log": null,
+            "pattern_delimiter_log": null,
+            "pattern_variable_log": null,
+            "pattern_type_log": null,
+            "revision": {
+                "type": "",
+                "variable": null,
+                "pattern_status_id": null,
+                "pattern_status_fa": null,
+                "pattern_message": null,
+                "pattern_description": null,
+                "pattern_is_share": null,
+                "delimiter": null
+            },
+            "pattern_log": null
+        },
+        {
+            "id": "67728abasdasda4554c04a562",
+            "partner_id": null,
+            "verifier_user_id": null,
+            "verifier_partner_id": null,
+            "title": null,
+            "username": "user",
+            "user_id": "1234",
+            "pattern_code": "aibg4oasdasd4545tj5ht",
+            "pattern_message": "پترن تست دستگاه ثبت شماره\r\n%number%",
+            "admin_comment": "متن پترن مورد تائید است.",
+            "pattern_description": "description",
+            "website": null,
+            "pattern_status": "active",
+            "pattern_status_fa": "فعال",
+            "pattern_status_id": 1,
+            "pattern_is_share": false,
+            "reject_text": "",
+            "type": "sms",
+            "variable": [
+                {
+                    "name": "number",
+                    "type": "string",
+                    "len": 20
+                }
+            ],
+            "delimiter": "%",
+            "updated_at": "2024-12-30T11:59:35.103000Z",
+            "time": 1735559975,
+            "pattern_type": "normal",
+            "readonly": false,
+            "pattern_state_revision": null,
+            "pattern_message_revision": null,
+            "pattern_is_share_revision": null,
+            "pattern_description_revision": null,
+            "pattern_delimiter_revision": null,
+            "pattern_variable_revision": null,
+            "pattern_type_revision": "",
+            "pattern_state_log": null,
+            "pattern_message_log": null,
+            "pattern_is_share_log": null,
+            "pattern_description_log": null,
+            "pattern_delimiter_log": null,
+            "pattern_variable_log": null,
+            "pattern_type_log": null,
+            "revision": {
+                "type": "",
+                "variable": null,
+                "pattern_status_id": null,
+                "pattern_status_fa": null,
+                "pattern_message": null,
+                "pattern_description": null,
+                "pattern_is_share": null,
+                "delimiter": null
+            },
+            "pattern_log": null
+        },
+        {
+            "id": "673717dfgdfg654c0f5602",
+            "partner_id": null,
+            "verifier_user_id": null,
+            "verifier_partner_id": null,
+            "title": null,
+            "username": "user",
+            "user_id": "1234",
+            "pattern_code": "8tx1asdf1q436n",
+            "pattern_message": "با سلام\r\nکد فعالسازی شما %code%",
+            "admin_comment": "متن پترن مورد تائید است.",
+            "pattern_description": "description",
+            "website": null,
+            "pattern_status": "active",
+            "pattern_status_fa": "فعال",
+            "pattern_status_id": 1,
+            "pattern_is_share": false,
+            "reject_text": "",
+            "type": "sms",
+            "variable": [
+                {
+                    "name": "code",
+                    "type": "integer",
+                    "len": 0
+                }
+            ],
+            "delimiter": "%",
+            "updated_at": "2024-11-15T09:43:28.117000Z",
+            "time": 1731663808,
+            "pattern_type": "normal",
+            "readonly": false,
+            "pattern_state_revision": null,
+            "pattern_message_revision": null,
+            "pattern_is_share_revision": null,
+            "pattern_description_revision": null,
+            "pattern_delimiter_revision": null,
+            "pattern_variable_revision": null,
+            "pattern_type_revision": "",
+            "pattern_state_log": null,
+            "pattern_message_log": null,
+            "pattern_is_share_log": null,
+            "pattern_description_log": null,
+            "pattern_delimiter_log": null,
+            "pattern_variable_log": null,
+            "pattern_type_log": null,
+            "revision": {
+                "type": "",
+                "variable": null,
+                "pattern_status_id": null,
+                "pattern_status_fa": null,
+                "pattern_message": null,
+                "pattern_description": null,
+                "pattern_is_share": null,
+                "delimiter": null
+            },
+            "pattern_log": null
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "per_page": 10,
+        "to": 3,
+        "total": 3,
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Validation Error (422)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "تکمیل گزینه code الزامی است (و 1 خطای دیگر)",
+        "message_parameters": [],
+        "message_code": "400-2",
+        "errors": {
+            "code": [
+                "تکمیل گزینه code الزامی است"
+            ],
+            "title": [
+                "تکمیل گزینه title الزامی است"
+            ]
+        }
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/patterns' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+## Get Pattern By Code
+This API allows you to retrieve a specific pattern by its code.
+
+### 📍 Endpoint
+GET {base_url}/api/patterns/{pattern_code}
+
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### Request Parameters
+| Key          | Type     | Description                                                                                   |
+|--------------|----------|-----------------------------------------------------------------------------------------------|
+| `pattern_code` | `string` | Required, The code of the pattern you want to retrieve |
+
+### ✅ Success Response
+```json
+{
+    "data": {
+        "id": "67728ab9asdasd4c04a562",
+        "partner_id": null,
+        "verifier_user_id": null,
+        "verifier_partner_id": null,
+        "title": null,
+        "username": "user",
+        "user_id": "1234",
+        "pattern_code": "aibg4dsfertj5ht",
+        "pattern_message": "پترن تست دستگاه ثبت شماره\r\n%number%",
+        "admin_comment": "متن پترن مورد تائید است.",
+        "pattern_description": "description",
+        "website": null,
+        "pattern_status": "active",
+        "pattern_status_fa": "فعال",
+        "pattern_status_id": 1,
+        "pattern_is_share": false,
+        "reject_text": "",
+        "type": "sms",
+        "variable": [
+            {
+                "name": "number",
+                "type": "string",
+                "len": 20
+            }
+        ],
+        "delimiter": "%",
+        "updated_at": "2024-12-30T11:59:35.103000Z",
+        "time": 1735559975,
+        "pattern_type": "normal",
+        "readonly": false,
+        "pattern_state_revision": null,
+        "pattern_message_revision": null,
+        "pattern_is_share_revision": null,
+        "pattern_description_revision": null,
+        "pattern_delimiter_revision": null,
+        "pattern_variable_revision": null,
+        "pattern_type_revision": "",
+        "pattern_state_log": null,
+        "pattern_message_log": null,
+        "pattern_is_share_log": null,
+        "pattern_description_log": null,
+        "pattern_delimiter_log": null,
+        "pattern_variable_log": null,
+        "pattern_type_log": null,
+        "revision": {
+            "type": "",
+            "variable": null,
+            "pattern_status_id": null,
+            "pattern_status_fa": null,
+            "pattern_message": null,
+            "pattern_description": null,
+            "pattern_is_share": null,
+            "delimiter": null
+        },
+        "pattern_log": null
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/patterns/aibg4dsfertj5ht' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+## Update Pattern
+This API allows you to update an existing pattern.
+
+### 📍 Endpoint
+PUT {base_url}/api/patterns/normal/{pattern_code}
+### 🧾 Headers
+| Key           | Value                |
+|---------------|----------------------|
+| Content-Type  | application/json |
+| Authorization | your-token           |
+### 📤 Request Body
+```json
+{
+    "title": "Updated Pattern",
+    "description": "Updated description",
+    "is_share": true,
+    "message": "Updated message with %var%",
+    "website": "https://updatedsite.com",
+    "variable": [
+        {
+            "name": "var",
+            "type": "string"
+        }
+    ]
+}
+```
+### Request Parameters
+| Key          | Type     | Description                                                                                                                                       |
+|--------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `title`      | `string` | Optional, The title of the pattern. The maximum length is 200 characters.                                                                         |
+| `description` | `string` | Required, The description of the pattern. The maximum length is 500 characters.                                                                   |
+| `is_share`   | `boolean`| Required, If set to `true`, the pattern will be shared with suset users of reseller                                                               |
+| `message`    | `string` | Required, The content of the pattern message.                                                                                                     |
+| `website`    | `string` | Optional, The website URL associated with the pattern.  |
+| `variable`   | `array`  | Required, An array of variables used in the pattern message. Each variable should have a `name` and a `type`. The maximum number of variables is 30. |
+| `name`       | `string` | Required, The name of the variable. The maximum length is 50 characters.                                                                           |
+| `type`       | `string` | Required, The type of the variable. Can be one of `string`, `integer`.                                                                    |
+### ✅ Success Response
+```json
+{
+    "data": {
+        "id": "67b1b80sdf55sff8f3d069472",
+        "title": "Updated Pattern",
+        "username": "user",
+        "pattern_code": "zcxxc465465zxc",
+        "pattern_message": "Updated message with %var%",
+        "admin_comment": null,
+        "pattern_description": "Updated description",
+        "pattern_status": "pending",
+        "pattern_is_share": true,
+        "reject_text": "",
+        "type": "sms",
+        "variable": [
+            {
+                "name": "var",
+                "type": "string",
+                "len": 40
+            }
+        ],
+        "delimiter": "%",
+        "updated_at": "2025-06-01T08:27:32.244000Z",
+        "time": 1748766452,
+        "pattern_state_revision": null,
+        "pattern_message_revision": null,
+        "pattern_is_share_revision": null,
+        "pattern_description_revision": null,
+        "pattern_delimiter_revision": null,
+        "pattern_state_log": null,
+        "pattern_message_log": null,
+        "pattern_is_share_log": null,
+        "pattern_description_log": null,
+        "pattern_delimiter_log": null
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/patterns/normal/zcxxc465465zxc' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' \
+--data-raw '{
+    "title": "Updated Pattern",
+    "description": "Updated description",
+    "is_share": true,
+    "message": "Updated message with %var%",
+    "variable": [
+        {
+            "name": "var",
+            "type": "string"
+        }
+    ]
+}'
+```
+
+## Delete Pattern
+This API allows you to delete an existing pattern by its code.
+
+### 📍 Endpoint
+DELETE {base_url}/api/patterns/normal/{pattern_code}
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### Request Parameters
+| Key          | Type     | Description                                                                                   |
+|--------------|----------|-----------------------------------------------------------------------------------------------|
+| `pattern_code` | `string` | Required, The code of the pattern you want to delete. |
+### ✅ Success Response
+```json
+{
+    "data": null,
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### ❌ Error Response — Pattern Not Found (404)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "پترن مورد نظر یافت نشد",
+        "message_parameters": [],
+        "message_code": "404-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location --request DELET '{base_url}/api/patterns/normal/zcxxc465465zxc' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
