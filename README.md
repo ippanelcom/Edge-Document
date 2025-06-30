@@ -6,7 +6,7 @@ account and beyond.
 
 ## 📚 Table of Contents
 
-> Base URL: `http://edge.ippanel.com/v1`
+> Base URL: `https://edge.ippanel.com/v1`
 
 > Please replace `{base_url}` with the actual base URL of the server.
 
@@ -64,6 +64,7 @@ account and beyond.
     - [Create Draft](#create-draft)
     - [List Drafts](#list-drafts)
 - [💳 Payment](#-payment)
+    - [My Credit](#my-credit)
 - [Pattern](#pattern)
     - [Create Pattern](#create-pattern)
     - [List Patterns](#list-patterns)
@@ -4848,6 +4849,55 @@ DELETE {base_url}/api/patterns/normal/{pattern_code}
 ### 🧪 Example using curl
 ```
 curl --location --request DELETE '{base_url}/api/patterns/normal/zcxxc465465zxc' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Your Apikey/Token' 
+```
+
+# 💳 Payment
+With this module, you can manage your payments. You can view your payment history, check your balance, and make payments.
+
+## My Credit
+This API allows you to check your current credit balance.
+### 📍 Endpoint
+GET {base_url}/api/payment/credit/mine
+### 🧾 Headers
+| Key           | Value            |
+|---------------|------------------|
+| Content-Type  | application/json |
+| Authorization | your-token       |
+### ✅ Success Response
+```json
+{
+    "data": {
+        "credit": 6084722932.705052,
+        "yesterday_credit": 195251925510.55,
+        "gift": 0,
+        "gift_expires_at": null,
+        "updated_at": "2025-06-30 18:07:06"
+    },
+    "meta": {
+        "status": true,
+        "message": "انجام شد",
+        "message_code": "200-1"
+    }
+}
+```
+### ❌ Error Response — Invalid or Expired Token (401)
+```json
+{
+    "data": null,
+    "meta": {
+        "status": false,
+        "message": "اطلاعات وارد شده صحیح نمی باشد",
+        "message_parameters": [],
+        "message_code": "400-1",
+        "errors": {}
+    }
+}
+```
+### 🧪 Example using curl
+```
+curl --location '{base_url}/api/payment/credit/mine' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
