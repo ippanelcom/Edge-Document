@@ -22,7 +22,7 @@ const config: Config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'ippanel.com', // Your GitHub org/user name.
+  organizationName: 'ippanelcom', // Your GitHub org/user name.
   projectName: 'Edge-Document', // Your repo name.
 
   onBrokenLinks: 'throw',
