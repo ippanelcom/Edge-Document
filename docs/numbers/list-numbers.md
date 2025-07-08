@@ -4,7 +4,7 @@ This API allows you to list all numbers that belong to users.
 ## 📍 Endpoint
 
 ```
-GET {base_url}/api/numbers?page=1&per_page=10
+GET {base_url}/api/number/numbers?page=1&per_page=10
 ```
 
 ## 🧾 Headers
@@ -94,7 +94,7 @@ GET {base_url}/api/numbers?page=1&per_page=10
 ## 🧪 Example Request
 
 ```bash
-curl --location '{base_url}/api/numbers?page=1&per_page=10' \
+curl --location '{base_url}/api/number/numbers?page=1&per_page=10' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```
