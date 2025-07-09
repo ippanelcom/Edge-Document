@@ -37,7 +37,21 @@ const sidebars: SidebarsConfig = {
                 'send/peer-to-peer',
                 'send/peer-to-peer-file',
                 'send/postalcode',
-                'send/country',
+                {
+                    type: 'category',
+                    label: 'Country',
+                    link: {
+                        type: 'doc',
+                        id: 'send/country/index',
+                    },
+                    items: [
+                        'send/country/count',
+                        'send/country/province',
+                        'send/country/county',
+                        'send/country/city',
+                        'send/country/gender',
+                    ], // Empty array for now, can add items when files are created
+                },
                 'send/keyword',
                 'send/keyword-phonebook',
                 'send/phonebook',
@@ -106,7 +120,55 @@ const sidebars: SidebarsConfig = {
                 type: 'doc',
                 id: 'phonebook/index',
             },
-            items: [], // Empty array for now
+            items: [
+                {
+                    type: 'category',
+                    label: 'Phonebook',
+                    link: {
+                        type: 'doc',
+                        id: 'phonebook/phonebook/index',
+                    },
+                    items: [
+                        'phonebook/phonebook/phonebook-list',
+                        'phonebook/phonebook/store-phonebook',
+                        'phonebook/phonebook/delete-phonebook',
+                        'phonebook/phonebook/update-phonebook',
+                    ], // Empty array for now
+                },
+                {
+                    type: 'category',
+                    label: 'Phonebook Number',
+                    link: {
+                        type: 'doc',
+                        id: 'phonebook/number/index',
+                    },
+                    items: [
+                        'phonebook/number/store-number',
+                        'phonebook/number/delete-number',
+                        'phonebook/number/show-number',
+                        'phonebook/number/list-number',
+                        'phonebook/number/export-number-contacts',
+                        'phonebook/number/update-number',
+                        'phonebook/number/import-number',
+                        'phonebook/number/sample-import-number',
+                        'phonebook/number/export-number-members',
+                    ], // Empty array for now
+                },
+                {
+                    type: 'category',
+                    label: 'Phonebook Option',
+                    link: {
+                        type: 'doc',
+                        id: 'phonebook/option/index',
+                    },
+                    items: [
+                        'phonebook/option/store-option',
+                        'phonebook/option/update-option',
+                        'phonebook/option/list-option',
+                        'phonebook/option/delete-option',
+                    ], // Empty array for now
+                },
+            ], // Empty array for now
         },
         {
             type: 'category',
