@@ -1,6 +1,6 @@
 # Get Recipients Count
 
-This API allows you to send messages using a pattern.
+This API allows you to retrieve the count of recipients based on various filters such as birth year, province, county, city
 
 ## 📍 Endpoint
 
