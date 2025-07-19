@@ -4,7 +4,7 @@ This API allows you to retrieve a list of all phonebook options.
 ## 📍 Endpoint
 
 ```
-GET {base_url}/api/phonebooks/options/listNew
+GET {base_url}/api/phonebooks/options/list-new
 ```
 
 ## 🧾 Headers
@@ -87,7 +87,7 @@ GET {base_url}/api/phonebooks/options/listNew
 ## 🧪 Example Request
 
 ```bash
-curl --location '{base_url}/api/phonebooks/options/listNew?type=int&title=t1' \
+curl --location '{base_url}/api/phonebooks/options/list-new?type=int&title=t1' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: API TOKEN''
 ```
