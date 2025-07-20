@@ -58,6 +58,7 @@ const sidebars: SidebarsConfig = {
                 'send/pattern',
                 'send/file',
                 'send/votp',
+                'send/url',
                 'send/cancel-scheduled'
                 // Additional items can be added when files are created
             ],
