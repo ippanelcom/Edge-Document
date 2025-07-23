@@ -2,6 +2,8 @@
 This API allows you to create a new draft message under a specific draft group. 
 
 ⚠️ Important: You can create a maximum of 200 drafts. If you try to create more, you will receive an error.
+
+⚠️ Maximum length for the `message` field is 1400 characters.
 ## 📍 Endpoint
 
 ```

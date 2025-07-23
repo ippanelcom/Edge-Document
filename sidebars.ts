@@ -195,8 +195,12 @@ const sidebars: SidebarsConfig = {
             items: [
                 'draft/create-draft-group',
                 'draft/list-draft-group',
+                'draft/update-draft-group',
+                'draft/delete-draft-group',
                 'draft/create-draft',
                 'draft/list-draft',
+                'draft/update-draft',
+                'draft/delete-draft',
             ], // Empty array for now
         },
         {
