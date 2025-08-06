@@ -1,5 +1,7 @@
 # List Packages
-This API allows you to list all packages (ACL Roles) under your reseller account. You can use the page and per_page parameters to paginate through the results.
+
+This API allows you to list all packages (ACL Roles) under your reseller account. You can use the page and per_page
+parameters to paginate through the results.
 
 ## 📍 Endpoint
 
@@ -9,19 +11,27 @@ GET {base_url}/api/acl/package/list?page=1&per_page=10
 
 ## 🧾 Headers
 
-| Key | Value |
-| --- | ----- |
-| Authorization | YOUR_TOKEN_HERE |
-| Content-Type | application/json |
+| Key           | Value            |
+|---------------|------------------|
+| Authorization | YOUR_TOKEN_HERE  |
+| Content-Type  | application/json |
 
 ## 📝 Parameters
 
-| Parameter | Type    | Required | Description                                                   |
-| --------- |---------| -------- |---------------------------------------------------------------|
-| page      | integer | No       | The page number to retrieve. Default is 1.                    |
-| per_page  | integer | No       | The number of items per page. Default is 10. Maximum is 1000. |
+| Parameter     | Type    | Required | Description                                                   |
+|---------------|---------|----------|---------------------------------------------------------------|
+| page          | integer | No       | The page number to retrieve. Default is 1.                    |
+| per_page      | integer | No       | The number of items per page. Default is 10. Maximum is 1000. |
+| package_id    | integer | No       | Filter by specific package ID.                                |
+| name          | string  | No       | Filter by package name.                                       |
+| register_type | string  | No       | Filter by registration type (e.g., online,webservice).        |
+| type          | string  | No       | Filter by package type (e.g., user,reseller).                 |
+| price         | integer | No       | Filter by package price.                                      |
+| special_disc  | integer | No       | Filter by special discount.                                   |
+| status        | string  | No       | Filter by package status (e.g., active, inactive).            |
 
-⚠️ Important: To exclude a filter from the query, do not include it at all in the request. Avoid sending it with an empty string or null value.
+⚠️ Important: To exclude a filter from the query, do not include it at all in the request. Avoid sending it with an
+empty string or null value.
 
 ## ✅ Success Response
 
@@ -99,12 +109,10 @@ GET {base_url}/api/acl/package/list?page=1&per_page=10
 }
 ```
 
-
-
 ## 🧪 Example Request
 
 ```bash
-curl --location '{base_url}/api/acl/package/list?page=1&per_page=10' \
+curl --location '{base_url}/api/acl/package/list?page=1&per_page=10&package_id=1234' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Your Apikey/Token' 
 ```

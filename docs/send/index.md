@@ -32,6 +32,7 @@ The IPPanel Edge API offers multiple methods for sending SMS messages, each suit
 - [VOTP](./votp) - Send a VOTP (Voice One-Time Password) message
 - [URL SMS](./url) - Send SMS messages using a URL request
 - [Cancel Scheduled](./cancel-scheduled) - Cancel scheduled messages
+- [Calculate Price](./calculate-price) - Calculate the price of sending SMS messages
 
 ## Request Format
 

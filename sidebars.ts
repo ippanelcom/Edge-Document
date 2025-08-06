@@ -59,7 +59,8 @@ const sidebars: SidebarsConfig = {
                 'send/file',
                 'send/votp',
                 'send/url',
-                'send/cancel-scheduled'
+                'send/cancel-scheduled',
+                'send/calculate-price'
                 // Additional items can be added when files are created
             ],
         },
@@ -101,6 +102,9 @@ const sidebars: SidebarsConfig = {
             items: [
                 'user/parents-tree',
                 'user/list-users',
+                'user/register-user',
+                'user/user-tariff',
+                'user/check-exist',
             ], // Empty array for now
         },
         {

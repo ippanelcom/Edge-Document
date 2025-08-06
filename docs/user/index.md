@@ -22,6 +22,9 @@ The IPPanel Edge API offers several user management endpoints:
 
 - [Get Parents Tree](./parents-tree) - Returns the full hierarchy (reseller tree) of a specific user
 - [List Users](./list-users) - List all users under your reseller account
+- [Register User](./register-user) - Register a new user under your reseller account
+- [Get User Tariff](./user-tariff) - Get the tariff information for a specific user
+- [Check User Existence](./check-exist) - Check if a user exists by username
 
 ## Response Format
 
