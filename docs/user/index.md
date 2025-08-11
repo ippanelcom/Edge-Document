@@ -25,6 +25,8 @@ The IPPanel Edge API offers several user management endpoints:
 - [Register User](./register-user) - Register a new user under your reseller account
 - [Get User Tariff](./user-tariff) - Get the tariff information for a specific user
 - [Check User Existence](./check-exist) - Check if a user exists by username
+- [Update User](./update-user) - Update the details of an existing user
+- [Show User](./show-user) - Retrieve the details of a specific user by user ID
 
 ## Response Format
 

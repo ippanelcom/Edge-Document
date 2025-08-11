@@ -105,6 +105,8 @@ const sidebars: SidebarsConfig = {
                 'user/register-user',
                 'user/user-tariff',
                 'user/check-exist',
+                'user/update-user',
+                'user/show-user',
             ], // Empty array for now
         },
         {

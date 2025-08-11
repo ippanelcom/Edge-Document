@@ -20,7 +20,7 @@ POST {base_url}/api/user/create
 
 ```json
 {
-  "username": "newuser",
+  "user_name": "newuser",
   "password": "StrongPassword123!",
   "national_code": "1234567890",
   "mobile_number": "09120000000",
@@ -33,7 +33,7 @@ POST {base_url}/api/user/create
 
 | Parameter     | Type    | Required | Description                                                                                                                                                                                                  |
 |---------------|---------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| username      | string  | Yes      | The username for the new user. Must be unique and not already in use.                                                                                                                                        |
+| user_name      | string  | Yes      | The user_name for the new user. Must be unique and not already in use.                                                                                                                                        |
 | password      | string  | Yes      | The password for the new user. Must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.                                    |
 | national_code | string  | Yes      | The national code of the new user. Must be a valid Iranian national code.                                                                                                                                    |
 | mobile_number | string  | Yes      | The mobile number of the new user. Must be a valid Iranian mobile number and must belong to the same person as the provided national ID.                                                                     |
