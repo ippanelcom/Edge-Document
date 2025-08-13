@@ -1,5 +1,7 @@
 # Phonebook Number Update
-This API allows you to update an existing phonebook contact by its ID. You can modify the contact's name, number, email, and additional options.
+
+This API allows you to update an existing phonebook contact by its ID. You can modify the contact's name, number, email,
+and additional options.
 
 ## 📍 Endpoint
 
@@ -9,10 +11,10 @@ PUT {base_url}/api/phonebooks/numbers/update-new/{contact_id}
 
 ## 🧾 Headers
 
-| Key | Value |
-| --- | ----- |
-| Authorization | YOUR_TOKEN_HERE |
-| Content-Type | application/json |
+| Key           | Value            |
+|---------------|------------------|
+| Authorization | YOUR_TOKEN_HERE  |
+| Content-Type  | application/json |
 
 ## 📤 Request Body
 
@@ -30,14 +32,14 @@ PUT {base_url}/api/phonebooks/numbers/update-new/{contact_id}
 
 ## 📝 Parameters
 
-| Parameter | Type | Required | Description                                                           |
-| --------- | ---- |----------|-----------------------------------------------------------------------|
-| number    | string | No       | The phone number in E.164 format.                                     |
-| pre | string | No       | The prefix for the name (e.g., Mr., Ms.).                             |
-| name      | string | No       | The name of the contact.                                              |
-| email     | string | No       | The email address of the contact.                                     |
-| options   | object | No       | Additional options as key-value pairs.                                |
-| phonebook_id | string | No      | The ID of the phonebook to which the contact belongs.                 |
+| Parameter    | Type   | Required | Description                                           |
+|--------------|--------|----------|-------------------------------------------------------|
+| number       | string | Yes      | The phone number in E.164 format.                     |
+| pre          | string | No       | The prefix for the name (e.g., Mr., Ms.).             |
+| name         | string | No       | The name of the contact.                              |
+| email        | string | No       | The email address of the contact.                     |
+| options      | object | No       | Additional options as key-value pairs.                |
+| phonebook_id | string | Yes      | The ID of the phonebook to which the contact belongs. |
 
 ## ✅ Success Response
 

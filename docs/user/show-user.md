@@ -6,7 +6,7 @@ as name, email, telephone number, ACL role ID, description, expiration time, sta
 ## 📍 Endpoint
 
 ```
-POST {base_url}/api/user/show?user_id=123456
+GET {base_url}/api/user/show?user_id=123456
 ```
 
 ## 🧾 Headers
