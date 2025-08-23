@@ -14,10 +14,30 @@ account and beyond.
 
 All API endpoints require authentication using a bearer token. You can obtain this token through the [Authentication](/docs/auth) section.
 
+🔑 What is a Token?
+
+A token is a string that is issued to the user after a successful login with their username and password.
+
+- The length of the token varies between 30 to 255 characters.
+
+- Each token is valid for 10 hours from the time it is issued.
+
+- All API endpoints in this documentation can be accessed using a valid token.
+
+🔑 What is an API Key?
+
+An API key is a string that can be generated from the user panel under:
+
+`User Panel > Developers > Access Keys`
+
+- Unlike tokens, API keys do not expire and can be used without time limits.
+
+- However, not all API endpoints support API keys. Some sensitive endpoints (e.g., changing a password or creating/viewing new API keys) are only accessible via a token.
+
 ## Getting Started
 
 1. Start with the [Authentication](/docs/auth) section to get your access token
-2. Use the token in the Authorization header: `Authorization: Bearer your-token-here`
+2. Use the token in the Authorization header: `Authorization: your-token-or-apikey-here`
 3. Explore the different API sections based on your needs
 
 ## API Sections
@@ -36,4 +56,6 @@ All API endpoints require authentication using a bearer token. You can obtain th
 
 ## Support
 
-If you need help or have questions, please create a support ticket through the [Tickets](/docs/ticket) section.
+If you need help or have questions, please create a support ticket through the [Tickets](/docs/ticket) section or contact our support team via our [website](https://ippanel.com).
+
+You can also reach out to our technical team by opening an issue directly on our [GitHub repository](https://github.com/ippanelcom/Edge-Document)

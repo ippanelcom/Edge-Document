@@ -50,6 +50,21 @@ POST {base_url}/api/acl/auth/confirm_otp
 
 ⏱ Valid for: 10 hours
 
+## Next Steps After Receiving the Token
+Once you receive the token at this step, you have two options to allow the user to continue working with the platform:
+### Option 1: Use Your Own Frontend
+If you have implemented your own frontend using our APIs, simply use the returned token in the Authorization header for all subsequent API calls.
+This way, you manage the user experience entirely within your own application.
+### Option 2: Redirect to Our Frontend
+Alternatively, you can redirect the user to our frontend, and let them continue directly in our panel.
+To do this, just redirect the user to the following URL with the token obtained in this step:
+
+```
+https://sms.your-domain/external-login?token={userToken}
+```
+
+If the token is valid, the user will be automatically logged in and will have full access to the panel.
+
 ## ❌ Error Response — Invalid or Expired Token or OTP (401)
 
 ```json
