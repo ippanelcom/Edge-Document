@@ -1,0 +1,62 @@
+{
+  "version.label": {
+    "message": "بعدی",
+    "description": "The label for version current"
+  },
+  "sidebar.apiSidebar.category.Authentication": {
+    "message": "احراز هویت",
+    "description": "The label for category Authentication in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Send SMS": {
+    "message": "ارسال پیامک",
+    "description": "The label for category Send SMS in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Country": {
+    "message": "شهر و استان",
+    "description": "The label for category Country in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Report": {
+    "message": "گزارش",
+    "description": "The label for category Report in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Numbers": {
+    "message": "شماره‌ها",
+    "description": "The label for category Numbers in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.User": {
+    "message": "کاربر",
+    "description": "The label for category User in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Package": {
+    "message": "بسته‌ها",
+    "description": "The label for category Package in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Phonebook": {
+    "message": "دفترچه تلفن",
+    "description": "The label for category Phonebook in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Phonebook Number": {
+    "message": "شماره های دفترچه تلفن",
+    "description": "The label for category Phonebook Number in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Phonebook Option": {
+    "message": "امکانات بیشتر دفترچه تلفن",
+    "description": "The label for category Phonebook Option in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.ticket": {
+    "message": "تیکت",
+    "description": "The label for category ticket in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Draft": {
+    "message": "پیش نویس",
+    "description": "The label for category Draft in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Pattern": {
+    "message": "الگو",
+    "description": "The label for category Pattern in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Payment": {
+    "message": "پرداخت",
+    "description": "The label for category Payment in sidebar apiSidebar"
+  }
+}

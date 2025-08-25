@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "داکیومنت پیاده سازی واسط برنامه نویسی کاربردی پنل IPPanel",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "IPPanel Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.API Documentation": {
+    "message": "داکیومنت واسط برنامه نویسی کاربردی",
+    "description": "Navbar item with label API Documentation"
+  },
+  "item.label.GitHub": {
+    "message": "گیت‌هاب",
+    "description": "Navbar item with label GitHub"
+  }
+}
