@@ -10,10 +10,10 @@ POST {base_url}/api/send
 
 ## 🧾 Headers
 
-| Key | Value |
-| --- | ----- |
-| Authorization | YOUR_TOKEN_HERE |
-| Content-Type | application/json |
+| Key           | Value            |
+|---------------|------------------|
+| Authorization | YOUR_TOKEN_HERE  |
+| Content-Type  | application/json |
 
 ## 📤 Request Body
 
@@ -34,16 +34,17 @@ POST {base_url}/api/send
 
 ## 📝 Parameters
 
-| Parameter | Type | Required | Description                                                         |
-| --------- | ---- | -------- |---------------------------------------------------------------------|
-| sending_type | string | Yes | Type of sending, must be "webservice" for this endpoint             |
-| from_number | string | Yes | Sender's phone number in E.164 format (e.g., +983000505)            |
-| message | string | Yes | Message content to be sent |
-| params | object | Yes | Parameters for sending the message, including recipients |
-| recipients | array | Yes | List of recipient phone numbers in E.164 format (e.g., +989120000000) |
-| send_time | string | No | Scheduled time for sending the message in YYYY-MM-DD HH:MM:SS.timezone is UTC. |
+| Parameter    | Type   | Required | Description                                                                    |
+|--------------|--------|----------|--------------------------------------------------------------------------------|
+| sending_type | string | Yes      | Type of sending, must be "webservice" for this endpoint                        |
+| from_number  | string | Yes      | Sender's phone number in E.164 format (e.g., +983000505)                       |
+| message      | string | Yes      | Message content to be sent                                                     |
+| params       | object | Yes      | Parameters for sending the message, including recipients                       |
+| recipients   | array  | Yes      | List of recipient phone numbers in E.164 format (e.g., +989120000000)          |
+| send_time    | string | No       | Scheduled time for sending the message in YYYY-MM-DD HH:MM:SS.timezone is UTC. |
 
 ## 📝 Notes
+
 - The `from_number` must be a valid sender number assigned to your account.
 - The `recipients` array must contain valid phone numbers in E.164 format.
 - The `send_time` is optional; if not provided, the message will be sent immediately.
@@ -99,6 +100,7 @@ POST {base_url}/api/send
   }
 }
 ```
+
 ## 🧪 Example Request
 
 ```bash

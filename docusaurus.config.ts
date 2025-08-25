@@ -33,7 +33,14 @@ const config: Config = {
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en','fa'],
+    localeConfigs: {
+      fa: {
+        label: 'فارسی',
+        direction: 'rtl',
+        htmlLang: 'fa-IR'
+      }
+    }
   },
 
   presets: [
@@ -69,6 +76,10 @@ const config: Config = {
           sidebarId: 'apiSidebar',
           position: 'left',
           label: 'API Documentation',
+        },
+        {
+          type: 'localeDropdown',
+          position: 'right',
         },
         {
           href: 'https://github.com/ippanelcom/Edge-Document',
@@ -108,4 +119,4 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 };
 
-export default config;
+export default config ;
