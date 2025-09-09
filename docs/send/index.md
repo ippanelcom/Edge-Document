@@ -25,6 +25,7 @@ The IPPanel Edge API offers multiple methods for sending SMS messages, each suit
 - [PostalCode SMS](./postalcode) - Send messages using postal codes
 - [Country SMS](./country) - Send messages to all numbers in a specific province or county or city
 - [Keyword SMS](./keyword) - Send messages using a keyword
+- [Job SMS](./jobs) - Send messages based on job categories
 - [Keyword Phonebook SMS](./keyword-phonebook) - Send messages using a keyword to a phonebook
 - [Phonebook SMS](./phonebook) - Send messages to one or more phonebooks
 - [Pattern SMS](./pattern) - Send messages using predefined patterns

@@ -52,6 +52,19 @@ const sidebars: SidebarsConfig = {
                         'send/country/gender',
                     ], // Empty array for now, can add items when files are created
                 },
+                {
+                    type: 'category',
+                    label: 'Jobs',
+                    link: {
+                        type: 'doc',
+                        id: 'send/jobs/index',
+                    },
+                    items: [
+                        'send/jobs/count',
+                        'send/jobs/categories',
+                        'send/jobs/sub-category',
+                    ], // Empty array for now, can add items when files are created
+                },
                 'send/keyword',
                 'send/keyword-phonebook',
                 'send/phonebook',
