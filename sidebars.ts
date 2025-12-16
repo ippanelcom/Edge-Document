@@ -54,6 +54,20 @@ const sidebars: SidebarsConfig = {
                 },
                 {
                     type: 'category',
+                    label: 'Country V2',
+                    link: {
+                        type: 'doc',
+                        id: 'send/countryV2/index',
+                    },
+                    items: [
+                        'send/countryV2/count',
+                        'send/countryV2/province',
+                        'send/countryV2/county',
+                        'send/countryV2/city',
+                    ], // Empty array for now, can add items when files are created
+                },
+                {
+                    type: 'category',
                     label: 'Jobs',
                     link: {
                         type: 'doc',
