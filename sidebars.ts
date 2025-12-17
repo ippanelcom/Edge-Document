@@ -134,6 +134,19 @@ const sidebars: SidebarsConfig = {
                 'user/check-exist',
                 'user/update-user',
                 'user/show-user',
+                {
+                    type: 'category',
+                    label: 'Documents',
+                    link: {
+                        type: 'doc',
+                        id: 'user/documents/index',
+                    },
+                    items: [
+                        'user/documents/list-document',
+                        'user/documents/upload-document',
+                        'user/documents/remove-document',
+                    ], // Empty array for now
+                },
             ], // Empty array for now
         },
         {

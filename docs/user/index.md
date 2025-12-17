@@ -27,6 +27,7 @@ The IPPanel Edge API offers several user management endpoints:
 - [Check User Existence](./check-exist) - Check if a user exists by username
 - [Update User](./update-user) - Update the details of an existing user
 - [Show User](./show-user) - Retrieve the details of a specific user by user ID
+- [User Documents](./documents) - This API allows you to manage user documents.
 
 ## Response Format
 
