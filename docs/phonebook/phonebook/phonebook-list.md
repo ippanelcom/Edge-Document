@@ -4,7 +4,7 @@ This API allows you to list all phonebook entries associated with your account.
 ## 📍 Endpoint
 
 ```
-POST {base_url}/api/phonebooks/list-new?page=1&per_page=10
+GET {base_url}/api/phonebooks/list-new?page=1&per_page=10
 ```
 
 ## 🧾 Headers
