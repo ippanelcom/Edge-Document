@@ -4,7 +4,7 @@ This API allows you to create a new pattern.
 ## 📍 Endpoint
 
 ```
-POST {base_url}/api/user/pattern
+POST {base_url}/api/patterns/normal
 ```
 
 ## 🧾 Headers
