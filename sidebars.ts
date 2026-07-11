@@ -45,7 +45,6 @@ const sidebars: SidebarsConfig = {
                         id: 'send/country/index',
                     },
                     items: [
-                        'send/country/count',
                         'send/country/province',
                         'send/country/county',
                         'send/country/city',
