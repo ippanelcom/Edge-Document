@@ -24,9 +24,7 @@ POST {base_url}/api/send
   "message": "تست",
   "params": [
     {
-      "phonebook_ids": [
-        "123654"
-      ],
+      "phonebook_id": "123654",
       "type": "all",
       "start": "1",
       "size": "2"
@@ -46,17 +44,17 @@ POST {base_url}/api/send
 
 ## 📝 Parameters
 
-| Parameter | Type | Required | Description                                              |
-| --------- | ---- | -------- |----------------------------------------------------------|
-| sending_type | string | Yes | Type of sending, must be "phonebook" for this endpoint   |
-| from_number | string | Yes | Sender's phone number in E.164 format (e.g., +983000505) |
-| message | string | Yes | Message content to be sent to the recipients             |
-| params | array | Yes | Array of objects containing phonebook details            |
-| phonebook_ids | array | Yes | List of phonebook IDs to send messages to                |
-| type | string | Yes | Type of phonebook sending, can be "all" or "detail"      |
-| start | string | No | Starting index for pagination            |
-| size | string | No | Number of records to fetch               |
-| phonebook_id | string | Yes | ID of the phonebook to send messages to (if type is "detail") |
+| Parameter | Type | Required | Description                                                           |
+| --------- | ---- | -------- |-----------------------------------------------------------------------|
+| sending_type | string | Yes | Type of sending, must be "phonebook" for this endpoint                |
+| from_number | string | Yes | Sender's phone number in E.164 format (e.g., +983000505)              |
+| message | string | Yes | Message content to be sent to the recipients                          |
+| params | array | Yes | Array of objects containing phonebook details                         |
+| phonebook_id | string | Yes | The phonebook ID to send messages to                                  |
+| type | string | Yes | Type of phonebook sending, can be "all" or "detail"                   |
+| start | string | No | Starting index for pagination                                         |
+| size | string | No | Number of records to fetch                                            |
+| phonebook_id | string | Yes | ID of the phonebook to send messages to (if type is "detail")         |
 | number_ids | array | Yes | List of specific number IDs to send messages to (if type is "detail") |
 
 
@@ -130,9 +128,7 @@ curl --location '{base_url}/api/send' \
     "message": "تست",
     "params": [
         {
-            "phonebook_ids": [
-                "123654"
-            ],
+            "phonebook_id": "123654",
             "type": "all",
             "start": "1",
             "size": "2"
