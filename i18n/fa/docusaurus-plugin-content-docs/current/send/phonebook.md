@@ -24,9 +24,7 @@ POST {base_url}/api/send
   "message": "تست",
   "params": [
     {
-      "phonebook_ids": [
-        "123654"
-      ],
+      "phonebook_id": "123654",
       "type": "all",
       "start": "1",
       "size": "2"
@@ -52,7 +50,6 @@ POST {base_url}/api/send
 | from_number   | string | بله                   | شماره فرستنده در فرمت E.164 (مثال: +983000505)                                       |
 | message       | string | بله                   | متن پیامی که میخواهید ارسال نمایید. این متن نباید بیش از 1400 کارکتر یا 20 پارت باشد |
 | params        | array  | بله                   | آرایه‌ای از اشیاء شامل تنظیمات دفترچه تلفن                                           |
-| phonebook_ids | array  | بله (برای نوع all)    | لیست شناسه‌های دفترچه تلفن                                                           |
 | phonebook_id  | string | بله (برای نوع detail) | شناسه دفترچه تلفن                                                                    |
 | type          | string | بله                   | نوع ارسال: "all" برای همه مخاطبین، "detail" برای مخاطبین خاص                         |
 | start         | string | خیر                   | شماره ردیف شروع (فقط برای نوع all)                                                   |
@@ -128,9 +125,7 @@ curl --location '{base_url}/api/send' \
     "message": "تست",
     "params": [
         {
-            "phonebook_ids": [
-                "123654"
-            ],
+            "phonebook_id": "123654",
             "type": "all",
             "start": "1",
             "size": "2"
